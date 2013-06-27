@@ -1,5 +1,5 @@
 function draw(){ 
-var board=new Array(4);
+var board=new Array(length);
 	drawSquare();
 	drawFirst();
 	output();
@@ -12,15 +12,21 @@ function drawFirst(){
 	board[2][1]=cell(2,1,'●');
 }
 
-function cell(x,y,moji){
+/*function cell(x,y,moji){
 	return '<span id="id'+x+y+'">'+moji+'</span>';
+}*/
+
+var length=4;//
+
+function cell(x,y,moji){
+	return moji;
 }
 
 function drawSquare(){
-	for(var x=0;x<4;x++){
-		board[x]=new Array(4);
+	for(var x=0;x<length;x++){
+		board[x]=new Array(length);
 		
-		for(var y=0;y<4;y++){
+		for(var y=0;y<length;y++){
 			board[x][y]=cell(x,y,'□');
 		}	
 	}
@@ -28,8 +34,8 @@ function drawSquare(){
 
 function output(){
 	var line='';
-	for(var y=0;y<4;y++){
-		for(var x=0;x<4;x++){line+=board[x][y];}
+	for(var y=0;y<length;y++){
+		for(var x=0;x<length;x++){line+=board[x][y];}
 			line+="<br>"
 	}	
 	document.getElementById("board").innerHTML=line;
@@ -53,17 +59,7 @@ function newStone(){
 	    }
 
 	    if(board[newX][newY]==cell(newX,newY,"□")){//空いてるかどうか
-		    if(turn==0){
-		    	if(judge(newY,newY)==true){
-			    	board[newX][newY]=cell(newX,newY,"●");
-			    	turn=1;
-			    }
-			}else{
-				//if(judge()==true){
-					board[newX][newY]=cell(newX,newY,"○");
-			    	turn=0;
-			    //}
-			}
+			judge(newX,newY,turn);
 		}
 		console.log(turn);
 	    output();
@@ -72,47 +68,89 @@ function newStone(){
 
 
 
-function judge(x,y){
-	vertical(y);
-	horizon(x);
+function judge(x,y,turn){
+	vertical(x,y,turn);
+	horizon(x,y,turn);
 }
 
-function vertical(y){//
-	var blacks=new Array();//黒があるところのインデックスを格納
-	var whites=new Array();
+function vertical(x,y,turn){//
 
-	for(var i=0;i<4;i++){
-		var isBlackOne=$.inArray(cell(i,y,"●"),board[y]);//黒があるところのインデックス
-		var isWhiteOne=$.inArray(cell(i,y,"○"),board[y]);
-		console.log("i="+i+isBlackOne+isWhiteOne);
-		if(isBlackOne!=-1){
-			blacks.push(isBlackOne);
+	var party="●";
+	var enemy="○";
+	if(turn==1){
+		party="○";
+		enemy="●";
+	}
+
+	var i=1;
+	if(x<length/2){	
+		while(board[x+i][y]==enemy){
+			i++;
 		}
-		if(isWhiteOne!=-1){
-			whites.push(isWhiteOne);
-		}	
-	}
-	 if(whites.length=1){
-	 	return true;
-	 }
-}
-
-function horizon(x){
-	var blacks=new Array();
-	var whites=new Array();
-
-	for(var i=0;i<4;i++){		
-		var isBlackOne=$.inArray(cell(x,i,"●"),board[x]);//黒があるところのインデックス
-		var isWhiteOne=$.inArray(cell(x,i,"○"),board[x]);
-		console.log("i="+i+isBlackOne+isWhiteOne);
-		if(isBlackOne!=-1){
-			blacks.push(isBlackOne);
+		if(i>=2&&board[x+i][y]==party){
+			for(var j=x;j<x+i;j++){			
+				board[j][y]=cell(j,y,party);
+			}
 		}
-		if(isWhiteOne!=-1){
-			whites.push(isWhiteOne);
-		}	
-	}
-	if(whites.length=1){
-		return true;
-	}
+		else{
+			checker=false;
+		}
+	}if(x>=length/2){
+		while(board[x-i][y]==enemy){
+			i++;
+		}
+		if(i>=2&&board[x-i][y]==party){
+			for(var j=x;j>x-i;j--){			
+				board[j][y]=cell(j,y,party);
+			}
+		}
+		else{
+			checker= false;
+		}
+	}	
 }
+
+
+function horizon(x,y,turn){//
+
+	var party="●";
+	var enemy="○";
+	if(turn==1){
+		party="○";
+		enemy="●";
+	}
+
+	var i=1;
+	if(y<length/2){	
+		while(board[x][y+i]==enemy){
+			i++;
+		}
+		if(i>=2&&board[x][y+i]==party){
+			for(var j=y;j<y+i;j++){			
+				board[x][j]=cell(x,j,party);
+			}
+		}
+		else{
+			
+		}
+	}if(x>=length/2){
+		while(board[x][y-i]==enemy){
+			i++;
+		}
+		if(i>=2&&board[x][y-i]==party){
+			for(var j=y;j>y-i;j--){			
+				board[x][j]=cell(x,j,party);
+			}
+		}
+		else{
+			
+		}
+	}	
+}
+
+function diagonal(){
+
+
+}
+
+
