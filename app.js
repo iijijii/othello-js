@@ -1,22 +1,22 @@
 function draw(){ 
-var board=new Array(length);
+	var board=new Array(length);
 	drawSquare();
 	drawFirst();
 	output();
 }
 
 function drawFirst(){
-	board[1][1]=cell(1,1,'○');
-	board[2][2]=cell(2,2,'○');
-	board[1][2]=cell(1,2,'●');
-	board[2][1]=cell(2,1,'●');
+	board[length/2-1][length/2-1]=cell(length/2-1,length/2-1,'○');
+	board[length/2][length/2]=cell(length/2,length/2,'○');
+	board[length/2-1][length/2]=cell(length/2-1,length/2,'●');
+	board[length/2][length/2-1]=cell(length/2,length/2-1,'●');
 }
 
 /*function cell(x,y,moji){
 	return '<span id="id'+x+y+'">'+moji+'</span>';
 }*/
 
-var length=4;//
+var length=4+2;
 
 function cell(x,y,moji){
 	return moji;
@@ -24,11 +24,16 @@ function cell(x,y,moji){
 
 function drawSquare(){
 	for(var x=0;x<length;x++){
-		board[x]=new Array(length);
-		
+		board[x]=new Array();
 		for(var y=0;y<length;y++){
-			board[x][y]=cell(x,y,'□');
-		}	
+			board[x][y]=".";
+		}
+	}
+
+	for(var x=1;x<length-1;x++){
+		for(var y=1;y<length-1;y++){
+			board[x][y]="□";
+		}
 	}
 }
 
@@ -57,7 +62,7 @@ function newStone(){
 	            var newY=document.form1.formy[i].value;
 	        }
 	    }
-
+console.log(board[newX].length);
 	    if(board[newX][newY]==cell(newX,newY,"□")){//空いてるかどうか
 			judge(newX,newY,turn);
 		}
@@ -67,10 +72,11 @@ function newStone(){
 }
 
 
-
 function judge(x,y,turn){
 	vertical(x,y,turn);
 	horizon(x,y,turn);
+	if(turn==1){turn=0;}
+	else{turn=1;}
 }
 
 function vertical(x,y,turn){//
