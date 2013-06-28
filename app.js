@@ -3,6 +3,7 @@ function draw(){
 	drawSquare();
 	drawFirst();
 	output();
+	turn=0;
 }
 
 function drawFirst(){
@@ -46,7 +47,7 @@ function output(){
 	document.getElementById("board").innerHTML=line;
 }
 
-var turn=0;//●のターン,turn=1は○のターン
+var turn;//●のターン,turn=1は○のターン
 
 function newStone(){
 	//ラジオボタンの値を設定
@@ -63,7 +64,7 @@ function newStone(){
 	        }
 	    }
 	    if(board[newX][newY]==cell(newX,newY,"□")){//空いてるかどうか
-			judge(newX,newY,turn);
+			judge(newX,newY);
 		}
 		console.log(turn);
 	    output();
@@ -71,20 +72,20 @@ function newStone(){
 }
 
 
-function judge(x,y,turn){
-	if(judges(x,y,turn)==true){
+function judge(x,y){
+	if(judges(x,y)==true){
 
 		for(var i=0;i<directions.length;i++){
-			rollOver(x,y,stones[i],directions[i],turn);
-			}//rollover()
-		if(turn==1){turn=0;}
-		else{turn=1;}
+			rollOver(x,y,stones[i],directions[i]);
+			}
+		if(turn==0){turn=1;}
+		else{turn=0;}
 	}	
 }
 
 var stones=new Array();//インデックスはdirectionsのインデックスを表す、要素はひっくりかえせる個数
 
-function judges(x,y,turn){
+function judges(x,y){
 	var party="●";
 	var enemy="○";
 	if(turn==1){
@@ -117,7 +118,7 @@ function judges(x,y,turn){
 var directions=[{dx:-1,dy:-1},{dx:0,dy:-1},{dx:1,dy:-1},{dx:1,dy:0},
 				{dx:1,dy:1},{dx:0,dy:1},{dx:-1,dy:1},{dx:-1,dy:0}];
 
-function rollOver(x,y,n,d,turn){//(x,y)からn-1個dの方向に裏返す
+function rollOver(x,y,n,d){//(x,y)からn-1個dの方向に裏返す
 	var party="●";
 	var enemy="○";
 	if(turn==1){
