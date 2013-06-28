@@ -63,29 +63,25 @@ function newStone(){
 	            var newY=parseInt(document.form1.formy[i].value);
 	        }
 	    }
-	    if(board[newX][newY]==cell(newX,newY,"□")){//空いてるかどうか
-			judge(newX,newY);
-		}
-		console.log(turn);
+	   
+		if(judges(newX,newY)==true){
+
+		for(var i=0;i<directions.length;i++){
+			rollOver(newX,newY,stones[i],directions[i]);
+			}
+		if(turn==0){turn=1;}
+		else{turn=0;}
+	}	
 	    output();
 	} 
 }
 
 
-function judge(x,y){
-	if(judges(x,y)==true){
-
-		for(var i=0;i<directions.length;i++){
-			rollOver(x,y,stones[i],directions[i]);
-			}
-		if(turn==0){turn=1;}
-		else{turn=0;}
-	}	
-}
-
 var stones=new Array();//インデックスはdirectionsのインデックスを表す、要素はひっくりかえせる個数
 
 function judges(x,y){
+	var flag=false;//裏返せない
+
 	var party="●";
 	var enemy="○";
 	if(turn==1){
@@ -93,25 +89,26 @@ function judges(x,y){
 		enemy="●";
 	}
 
-	var flag=false;//裏返せない
+	 if(board[x][y]==cell(x,y,"□")){
 
-	while(stones.length!==0){
-		stones.pop();
-	}
-
-	for(var i=0;i<directions.length;i++){
-		var n=1;
-		while(board[x+n*directions[i].dx][y+n*directions[i].dy]==enemy){
-			n++;          //n-1=ひっくりかえせる数
-		}	
-		if(n>=2&&board[x+n*directions[i].dx][y+n*directions[i].dy]==party){
-			stones.push(n-1);
-			flag=true;
-		}else{
-			stones.push(0);
+		while(stones.length!==0){
+			stones.pop();
 		}
+
+		for(var i=0;i<directions.length;i++){
+			var n=1;
+			while(board[x+n*directions[i].dx][y+n*directions[i].dy]==enemy){
+				n++;          //n-1=ひっくりかえせる数
+			}	
+			if(n>=2&&board[x+n*directions[i].dx][y+n*directions[i].dy]==party){
+				stones.push(n-1);
+				flag=true;
+			}else{
+				stones.push(0);
+			}
+		}
+		return flag;
 	}
-	return flag;
 }
 
 
