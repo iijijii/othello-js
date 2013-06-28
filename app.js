@@ -66,13 +66,18 @@ function newStone(){
 	   
 		if(judges(newX,newY)==true){
 
-		for(var i=0;i<directions.length;i++){
-			rollOver(newX,newY,stones[i],directions[i]);
+			for(var i=0;i<directions.length;i++){
+				rollOver(newX,newY,stones[i],directions[i]);
 			}
-		if(turn==0){turn=1;}
-		else{turn=0;}
-	}	
+			//if(turn==0){
+				turn=1;
+			//}
+			//else{turn=0;}
+		}	
+		AI();
 	    output();
+	    
+	    turn=0;
 	} 
 }
 
@@ -111,7 +116,6 @@ function judges(x,y){
 	}
 }
 
-
 var directions=[{dx:-1,dy:-1},{dx:0,dy:-1},{dx:1,dy:-1},{dx:1,dy:0},
 				{dx:1,dy:1},{dx:0,dy:1},{dx:-1,dy:1},{dx:-1,dy:0}];
 
@@ -128,3 +132,46 @@ function rollOver(x,y,n,d){//(x,y)からn-1個dの方向に裏返す
 	}
 }
 
+function AI(){////////修正必要！！！！
+	for(var x=1;x<length-1;x++){
+		for(var y=1;y<length-1;y++){
+			if(judges(x,y)==true){
+				break;
+			}
+		}
+	}
+	for(var i=0;i<directions.length;i++){
+		rollOver(x,y,stones[i],directions[i]);
+	}	
+}
+
+
+/*function makeGameTree(board,turn){
+	return{
+		board:board,
+		turn:turn,
+		moves:listMoves(board,turn)
+	}
+}
+
+function listMoves(board,turn){
+	var moves=[];
+	for(var x=1;x<length-1;x++){
+		for(var y=1;y<length-1;y++){
+			if(canAttack(board,turn,x,y)){
+				moves.push(makeGameTree(makeAttackedBoard(board,turn,x,y),changePlayer(turn));
+			}
+		}
+	}
+	return moves;
+}
+
+function changePlayer(turn){
+	if(turn==0){turn=1;}
+	else{turn=0;}
+	return turn;
+}
+
+function makeAttackedBoard(board,turn,x,y){
+
+}*/
