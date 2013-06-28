@@ -73,8 +73,8 @@ function newStone(){
 
 
 function judge(x,y,turn){
-//	vertical(x,y,turn);
 	horizon(x,y,turn);
+	//vertical(x,y,turn);
 	if(turn==1){turn=0;}
 	else{turn=1;}
 }
@@ -88,20 +88,17 @@ function horizon(x,y,turn){//
 		enemy="●";
 	}
 
-	var i=1;
-	
-	//(board[x+i][y]!=".")
-
+	var i=1;//iは置きたいところからの距離
 	while(board[x+i][y]==enemy){
 		i++;
 	}
 	if(i>=2&&board[x+i][y]==party){
-		for(var j=x;j<x+i;j++){			
+		rollOver(x,y,i,directions[3],turn);
+		/*for(var j=x;j<x+i;j++){			
 			board[j][y]=cell(j,y,party);
-		}
+		}*/
+		//return true;
 	}
-	
-
 	//else{
 	
 	//}
@@ -111,19 +108,17 @@ function horizon(x,y,turn){//
 		k++;
 	}
 	if(k>=2&&board[x-k][y]==party){
-		for(var j=x;j>x-k;j--){			
+		rollOver(x,y,k,directions[7],turn);
+		/*for(var j=x;j>x-k;j--){			
 			board[j][y]=cell(j,y,party);
-		}
+		}*/
 	}
 	//else{
 	
 	//}
 }	
 
-
-
-
-function verical(x,y,turn){//
+function vertical(x,y,turn){//
 
 	var party="●";
 	var enemy="○";
@@ -132,8 +127,8 @@ function verical(x,y,turn){//
 		enemy="●";
 	}
 
-	var i=1;
-	
+//下側に置く場合
+	var i=1;	
 	while(board[x][y+i]==enemy){
 		i++;
 	}
@@ -145,13 +140,13 @@ function verical(x,y,turn){//
 	//else{
 		
 	//}
-
-
-	while(board[x][y-i]==enemy){
-		i++;
+//上側に置く場合
+	var k=1;
+	while(board[x][y-k]==enemy){
+		k++;
 	}
-	if(i>=2&&board[x][y-i]==party){
-		for(var j=y;j>y-i;j--){			
+	if(k>=2&&board[x][y-k]==party){
+		for(var j=y;j>y-k;j--){			
 			board[x][j]=party;
 		}
 	}
@@ -162,8 +157,34 @@ function verical(x,y,turn){//
 }
 
 function diagonal(){
+	//右下
+	var i=1;	
+	while(board[x+i][y+i]==enemy){
+		i++;
+	}
+	if(i>=2&&board[x+i][y+i]==party){
+		for(var j=y;j<y+i;j++){			
+			board[j][j]=party;
+		}
+	}
 
+	//
 
 }
 
+var directions=[{dx:-1,dy:-1},{dx:0,dy:-1},{dx:1,dy:-1},{dx:1,dy:0},
+				{dx:1,dy:1},{dx:0,dy:1},{dx:-1,dy:1},{dx:-1,dy:0}];
+
+function rollOver(x,y,n,d,turn){//(x,y)からn-1個dの方向に裏返す
+	var party="●";
+	var enemy="○";
+	if(turn==1){
+		party="○";
+		enemy="●";
+	}
+	
+	for(var j=0;j<n;j++){
+		board[x+j*d.dx][y+j*d.dy]=party;
+	}
+}
 
